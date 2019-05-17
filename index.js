@@ -1,7 +1,7 @@
 const fs = require('fs');
 const path = require('path');
 const chardet = require('chardet');
-const { Iconv } = require('iconv');
+const iconv = require('iconv-lite');
 
 let root = process.argv[2];
 let subs = [];
@@ -27,8 +27,7 @@ function getSubs(dir, list) {
 function fix(sub) {
     let data = fs.readFileSync(sub);
     let encoding = chardet.detect(data);
-    let iconv = new Iconv(encoding, 'UTF-8');
-    let converted = iconv.convert(data);
+    let converted = iconv.decode(data, encoding);
     let dir = path.dirname(sub);
     let name = path.basename(sub);
     let fixed = path.join(dir, '(fixed) ' + name);
