@@ -1,0 +1,11 @@
+{
+  "name": "subfixer",
+  "version": "1.0.0",
+  "main": "index.js",
+  "author": "Sadra Samadi <sadrasamadi.t@gmail.com> (http://sadrasamadi.com/)",
+  "license": "MIT",
+  "dependencies": {
+    "chardet": "^0.7.0",
+    "iconv": "^2.3.4"
+  }
+}
