@@ -14,7 +14,7 @@ function getSubs(dir, list) {
         let abs = path.join(dir, file);
         let stat = fs.lstatSync(abs);
         if (stat.isDirectory()) {
-            getFiles(abs, list);
+            getSubs(abs, list);
             return;
         }
         let ext = path.extname(file);
