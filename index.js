@@ -1,36 +1,56 @@
-const fs = require('fs');
+#!/usr/bin/env node
+
+const cfonts = require('cfonts');
+const yargs = require('yargs');
+const fse = require('fs-extra');
 const path = require('path');
+const ProgressBar = require('progress');
 const chardet = require('chardet');
 const iconv = require('iconv-lite');
 
-let root = process.argv[2];
-let subs = [];
-getSubs(root, subs);
-subs.forEach(fix);
+(async () => {
+  cfonts.say('SUBFIXER');
+  let args = yargs
+    .command('$0 <path>', 'Usage: subfixer <path>', argv => argv.positional('path', { type: 'string', desc: 'Path to subtitle(s).' }))
+    .parse();
+  let root = path.resolve(args.path);
+  console.log(root);
+  let exists = await fse.pathExists(root);
+  if (!exists) {
+    console.error('directory not exists:', root);
+    return;
+  }
+  let files = await getFiles(root);
+  let bar = new ProgressBar('fixing (:current/:total) [:bar] :percent', files.length);
+  await files.reduce(async (prev, file) => {
+    await prev;
+    await fix(file);
+    bar.tick();
+  }, Promise.resolve());
+})();
 
-function getSubs(dir, list) {
-    let files = fs.readdirSync(dir);
-    files.forEach(file => {
-        let abs = path.join(dir, file);
-        let stat = fs.lstatSync(abs);
-        if (stat.isDirectory()) {
-            getSubs(abs, list);
-            return;
-        }
-        let ext = path.extname(file);
-        ext = ext.toLowerCase();
-        if (ext === '.srt')
-            list.push(abs);
-    });
+async function getFiles(root) {
+  let stat = await fse.lstat(root);
+  if (stat.isDirectory()) {
+    let files = await fse.readdir(root);
+    return await files.reduce(async (prev, name) => {
+      let total = await prev;
+      let file = path.join(root, name);
+      let list = await getFiles(file);
+      return [...total, ...list];
+    }, Promise.resolve([]));
+  } else {
+    let regex = new RegExp(/\.srt$/, 'i');
+    return regex.test(root) ? [root] : [];
+  }
 }
 
-function fix(sub) {
-    let data = fs.readFileSync(sub);
-    let encoding = chardet.detect(data);
-    let converted = iconv.decode(data, encoding);
-    let dir = path.dirname(sub);
-    let name = path.basename(sub);
-    let fixed = path.join(dir, '(fixed) ' + name);
-    fs.writeFileSync(fixed, converted);
-    console.log(fixed);
+async function fix(file) {
+  let data = await fse.readFile(file);
+  let encoding = chardet.detect(data);
+  let converted = iconv.decode(data, encoding);
+  let dir = path.dirname(file);
+  let name = path.basename(file);
+  let fixed = path.join(dir, '(fixed) ' + name);
+  await fse.writeFile(fixed, converted);
 }
