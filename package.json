@@ -1,10 +1,14 @@
 {
-  "name": "subfixer",
-  "version": "1.0.0",
+  "name": "@sadrasamadi/subfixer",
+  "version": "1.0.1",
   "description": "Fix .srt subtitles charset.",
   "author": "Sadra Samadi <samadi_s@live.com> (http://sadrasamadi.github.io/)",
+  "repository": "https://github.com/SadraSamadi/subfixer",
+  "preferGlobal": true,
   "license": "MIT",
-  "bin": "index.js",
+  "bin": {
+    "subfixer": "index.js"
+  },
   "dependencies": {
     "cfonts": "^2.4.5",
     "chardet": "^0.8.0",
