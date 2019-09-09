@@ -11,10 +11,18 @@ const iconv = require('iconv-lite');
 (async () => {
   cfonts.say('SUBFIXER');
   let args = yargs
-    .command('$0 <path>', 'Usage: subfixer <path>', argv => argv.positional('path', { type: 'string', desc: 'Path to subtitle(s).' }))
+    .command({
+      command: '$0 <path>',
+      describe: 'Usage: subfixer <path>',
+      builder: argv => {
+        argv.positional('path', {
+          type: 'string',
+          desc: 'Path to subtitle(s).'
+        })
+      }
+    })
     .parse();
   let root = path.resolve(args.path);
-  console.log(root);
   let exists = await fse.pathExists(root);
   if (!exists) {
     console.error('directory not exists:', root);
