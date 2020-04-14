@@ -14,11 +14,11 @@ const iconv = require('iconv-lite');
     .command({
       command: '$0 <path>',
       describe: 'Usage: subfixer <path>',
-      builder: argv => {
-        argv.positional('path', {
+      builder: {
+        path: {
           type: 'string',
           desc: 'Path to subtitle(s).'
-        })
+        }
       }
     })
     .parse();
@@ -42,10 +42,9 @@ async function getFiles(root) {
   if (stat.isDirectory()) {
     let files = await fse.readdir(root);
     return await files.reduce(async (prev, name) => {
-      let total = await prev;
       let file = path.join(root, name);
       let list = await getFiles(file);
-      return [...total, ...list];
+      return [...await prev, ...list];
     }, Promise.resolve([]));
   } else {
     let regex = new RegExp(/\.srt$/, 'i');
