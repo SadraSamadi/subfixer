@@ -19,14 +19,12 @@ Fix `.srt` subtitles charset.
  ╚══════╝  ╚═════╝  ╚═════╝  ╚═╝      ╚═╝ ╚═╝  ╚═╝ ╚══════╝ ╚═╝  ╚═╝
 
 
-index.js <path>
+subfixer <path>
 
 Usage: subfixer <path>
 
-Positionals:
-  path  Path to subtitle(s).                                            [string]
-
 Options:
-  --help     Show help                                                 [boolean]
-  --version  Show version number                                       [boolean]
+  --path         Path to subtitle(s).                                   [string]
+  -v, --version  Show version number                                   [boolean]
+  -h, --help     Show help                                             [boolean]
 ```

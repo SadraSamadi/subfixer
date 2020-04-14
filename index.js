@@ -10,7 +10,7 @@ const iconv = require('iconv-lite');
 
 (async () => {
   cfonts.say('SUBFIXER');
-  let args = yargs
+  let args = yargs.usage('Usage: $0 <path>')
     .command({
       command: '$0 <path>',
       describe: 'Usage: subfixer <path>',
@@ -21,6 +21,10 @@ const iconv = require('iconv-lite');
         }
       }
     })
+    .alias('v', 'version')
+    .alias('h', 'help')
+    .version()
+    .help()
     .parse();
   let root = path.resolve(args.path);
   let exists = await fse.pathExists(root);
