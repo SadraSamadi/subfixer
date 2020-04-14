@@ -1,6 +1,6 @@
 {
   "name": "@sadrasamadi/subfixer",
-  "version": "1.0.3",
+  "version": "1.0.4",
   "description": "Fix .srt subtitles charset.",
   "author": "Sadra Samadi <sadra.smd@gmail.com> (http://sadrasamadi.github.io/)",
   "repository": "https://github.com/SadraSamadi/subfixer",
